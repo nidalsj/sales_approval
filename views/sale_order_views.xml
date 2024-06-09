@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- override and hide original confirm button -->
+            <xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- setting visibility of buttons -->
+            <xpath expr="//header" position="inside">
+                <button name="action_submit" type="object" string="Submit" class="oe_highlight" invisible="state != 'draft'"/>
+                <button name="action_approve" type="object" string="Approve" class="oe_highlight" invisible="state != 'waiting_approval'"/>
+                <button name="action_reject" type="object" string="Reject" class="oe_highlight" invisible="state != 'waiting_approval'"/>
+                <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" invisible="state != 'approved'"/>
+            </xpath>
+
+            <!-- new states in status bar -->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,sent,waiting_approval,approved,sale,cancel</attribute>
+            </xpath>          
+        </field>
+    </record>
+</odoo>
