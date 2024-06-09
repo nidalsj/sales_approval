@@ -6,17 +6,20 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
 
-            <!-- override and hide original confirm button -->
+            <!-- override and hide original confirm button from draft and sent states -->
+            <xpath expr="//header/button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
 
             <!-- setting visibility of buttons -->
             <xpath expr="//header" position="inside">
-                <button name="action_submit" type="object" string="Submit" class="oe_highlight" invisible="state != 'draft'"/>
+                <button name="action_submit" type="object" string="Submit" class="oe_highlight" invisible="state not in ('draft', 'sent')"/>
                 <button name="action_approve" type="object" string="Approve" class="oe_highlight" invisible="state != 'waiting_approval'"/>
                 <button name="action_reject" type="object" string="Reject" class="oe_highlight" invisible="state != 'waiting_approval'"/>
-                <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" invisible="state != 'approved'"/>
+                <button name="action_confirm" type="object" string="Confirm Sale" class="oe_highlight" invisible="state != 'approved'"/>
             </xpath>
 
             <!-- new states in status bar -->
