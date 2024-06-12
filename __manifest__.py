@@ -6,6 +6,7 @@
     'depends':['base','stock','sale'],
     'version': '1.0',
     'data': [
+        'security/ir.model.access.csv',
         'security/user_groups.xml',
         'views/sale_order_views.xml',
     ],
