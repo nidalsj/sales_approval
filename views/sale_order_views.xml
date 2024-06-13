@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
 
-            <!-- override and hide original confirm button from draft and sent states -->
+            <!-- Hide original confirm buttons for all users -->
             <xpath expr="//header/button[@name='action_confirm'][1]" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -16,17 +16,27 @@
 
             <!-- setting visibility of buttons -->
             <xpath expr="//header" position="inside">
-                <button name="action_submit" type="object" string="Submit" class="oe_highlight" invisible="state not in ('draft', 'sent')"/>
-                <button name="action_approve" type="object" string="Approve" class="oe_highlight" invisible="state != 'waiting_approval'"/>
-                <button name="action_reject" type="object" string="Reject" class="oe_highlight" invisible="state != 'waiting_approval'"/>
-                <button name="action_confirm" type="object" string="Confirm Sale" class="oe_highlight" invisible="state != 'approved'"/>
+                <button name="action_submit" type="object" string="Submit" class="oe_highlight" groups="sales_approval.om_group_sales_approver" invisible="state not in ('draft', 'sent')"/>
+                <button name="action_approve" type="object" string="Approve" class="oe_highlight" groups="sales_approval.om_group_sales_approver" invisible="state != 'waiting_approval'"/>
+                <button name="action_reject" type="object" string="Reject" class="oe_highlight" groups="sales_approval.om_group_sales_approver" invisible="state != 'waiting_approval'"/>
+                <button name="action_confirm" type="object" string="Confirm Sale" class="oe_highlight" groups="sales_approval.om_group_sales_approver" invisible="state != 'approved'"/>
             </xpath>
 
             <!-- new states in status bar -->
             <xpath expr="//field[@name='state']" position="attributes">
                 <attribute name="widget">statusbar</attribute>
                 <attribute name="statusbar_visible">draft,sent,waiting_approval,approved,sale,cancel</attribute>
-            </xpath>          
+            </xpath>
+
+            <!-- Ensure the normal workflow is visible for other users -->
+            <xpath expr="//header/button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </xpath>
+            
+            
         </field>
     </record>
 </odoo>

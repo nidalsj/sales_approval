@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!--  new category for Sales Approval -->
-    <record id="module_category_sales_approval" model="ir.module.category">
+    <!-- APPLICATION SELECTION IN GROUPS FORM -->
+    <record id="module_sales_approval" model="ir.module.category">
         <field name="name">Sales Approval</field>
         <field name="description">Sales Approval Category</field>
-        <field name="sequence">10</field> <!-- Add sequence to control the order -->
     </record>
 
-    <!-- new user group for Sales Approver -->
-    <record id="group_sales_approver" model="res.groups">
+    <record id="om_group_sales_approver" model="res.groups">
         <field name="name">Sales Approver</field>
-        <field name="category_id" ref="module_category_sales_approval"/>
+        <field name="category_id" ref="module_sales_approval" />
+    </record>
+
+
+    <record id="sales_approval_rule_sales_approver" model="ir.rule">
+        <field name="name">Sales Approval Sales Approver Rule</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="groups" eval="[(4, ref('om_group_sales_approver'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
     </record>
 
 </odoo>

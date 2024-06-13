@@ -12,31 +12,31 @@ class SaleOrder(models.Model):
         string='State'
     )
 
-    def action_submit(self):
-        self.write({'state': 'waiting_approval'})
-
-
-    def action_approve(self):
-        self.write({'state': 'approved'})
-
-
-    def action_reject(self):
-        self.write({'state': 'draft'})
-
     
     def action_submit(self):
+        if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
+            raise UserError('You do not have the rights to perform this action.')
         self.message_post(body="Sale order submitted for approval by %s" % (self.env.user.name))
         self.write({'state': 'waiting_approval'})
 
+
     def action_approve(self):
+        if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
+            raise UserError('You do not have the rights to perform this action.')
         self.message_post(body="Sale order approved by %s" % (self.env.user.name))
         self.write({'state': 'approved'})
 
+
     def action_reject(self):
+        if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
+            raise UserError('You do not have the rights to perform this action.')
         self.message_post(body="Sale order rejected by %s" % (self.env.user.name))
         self.write({'state': 'draft'})
 
+
     def action_confirm(self):
+        if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
+            raise UserError('You do not have the rights to perform this action.')
         if self.state != 'approved':
             raise UserError('Invalid Operation: The sale order must be approved before it can be confirmed.')
         self.message_post(body="Sale order confirmed by %s" % (self.env.user.name))
