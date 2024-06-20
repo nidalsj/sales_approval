@@ -3,7 +3,7 @@
     'category': 'Sales',
     'summary': 'Inventory Lot Management',
     'license': 'LGPL-3',
-    'depends':['base','stock','sale'],
+    'depends':['base','stock','sale','mail'],
     'version': '1.0',
     'data': [
         'security/ir.model.access.csv',

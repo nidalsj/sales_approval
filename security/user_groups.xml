@@ -7,6 +7,7 @@
         <field name="description">Sales Approval Category</field>
     </record>
 
+    
     <record id="om_group_sales_approver" model="res.groups">
         <field name="name">Sales Approver</field>
         <field name="category_id" ref="module_sales_approval" />
@@ -17,6 +18,7 @@
     <record id="base.group_system" model="res.groups">
         <field name="implied_ids" eval="[(4, ref('om_group_sales_approver'))]"/>
     </record>
+
 
     <record id="sales_approval_rule_sales_approver" model="ir.rule">
         <field name="name">Sales Approval Sales Approver Rule</field>
