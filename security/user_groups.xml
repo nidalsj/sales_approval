@@ -13,15 +13,20 @@
     </record>
 
 
+    <!-- GIVE ADMIN ALL THE ACCESS OF SALES APPROVAL GROUP -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('om_group_sales_approver'))]"/>
+    </record>
+
     <record id="sales_approval_rule_sales_approver" model="ir.rule">
         <field name="name">Sales Approval Sales Approver Rule</field>
         <field name="model_id" ref="sale.model_sale_order"/>
         <field name="groups" eval="[(4, ref('om_group_sales_approver'))]"/>
         <field name="domain_force">[(1, '=', 1)]</field>
         <field name="perm_read" eval="1"/>
-        <field name="perm_write" eval="0"/>
-        <field name="perm_create" eval="0"/>
-        <field name="perm_unlink" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
     </record>
 
 </odoo>
