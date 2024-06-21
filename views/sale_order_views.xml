@@ -28,7 +28,7 @@
                 <attribute name="statusbar_visible">draft,sent,waiting_approval,approved,sale,cancel</attribute>
             </xpath>
 
-            <!-- Ensure the normal workflow is visible for other users -->
+            <!-- the normal workflow is visible for other users -->
             <xpath expr="//header/button[@name='action_confirm'][1]" position="attributes">
                 <attribute name="groups">base.group_user</attribute>
             </xpath>

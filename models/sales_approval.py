@@ -14,10 +14,13 @@ class SaleOrder(models.Model):
     )
 
 
+    # notify all group members on submit, approve, and confirm sale order
     def _notify_sales_approvers(self, message):
         group = self.env.ref('sales_approval.om_group_sales_approver')
         users = group.users
         if users:
+            # creates a list of notification dictionary for each user in the group
+            # format (0, 0, values) is used to specify that new records should be created
             notification_ids = [(0, 0,
                                 {
                                     'res_partner_id': user.partner_id.id,
