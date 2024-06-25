@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, AccessError, ValidationError
 
 
 class SaleOrder(models.Model):
@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
                                 }
                                 ) for user in users if users]
             self.env['mail.message'].create({
-            'message_type': "notification",
+            'message_type': "comment",
             'body': message,
             'subject': "Sale Order",
             'partner_ids': [(4, user.partner_id.id) for user in users if users],
@@ -41,28 +41,28 @@ class SaleOrder(models.Model):
     
     def action_submit(self):
         if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
-            raise UserError('You do not have the rights to perform this action.')
+            raise AccessError('You do not have the rights to perform this action.')
         self.write({'state': 'waiting_approval'})
         self._notify_sales_approvers("Sale order %s submitted for approval" % (self.name))
 
 
     def action_approve(self):
         if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
-            raise UserError('You do not have the rights to perform this action.')
+            raise AccessError('You do not have the rights to perform this action.')
         self.write({'state': 'approved'})
         self._notify_sales_approvers("Sale order %s is approved" % (self.name))
 
 
     def action_reject(self):
         if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
-            raise UserError('You do not have the rights to perform this action.')
+            raise AccessError('You do not have the rights to perform this action.')
         self.write({'state': 'draft'})
         self._notify_sales_approvers("Sale order %s is rejected" % (self.name))
 
 
     def action_confirm(self):
         if not self.env.user.has_group('sales_approval.om_group_sales_approver'):
-            raise UserError('You do not have the rights to perform this action.')
+            raise AccessError('You do not have the rights to perform this action.')
         if self.state != 'approved':
             raise UserError('Invalid Operation: The sale order must be approved before it can be confirmed.')
         super(SaleOrder, self).action_confirm()
@@ -73,4 +73,4 @@ class SaleOrder(models.Model):
     def _can_be_confirmed(self):
         self.ensure_one()
         return self.state in {'draft', 'sent', 'approved'}
-    
+          
